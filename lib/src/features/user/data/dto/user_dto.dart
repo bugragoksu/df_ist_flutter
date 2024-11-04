@@ -6,12 +6,18 @@ part 'user_dto.g.dart';
 @JsonSerializable()
 class UserDto {
   final String id;
-  final String name;
+  final String firstName;
+  final String lastName;
   final String email;
 
-  UserDto({required this.id, required this.name, required this.email});
+  UserDto({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+  });
 
-  UserModel toModel() => UserModel(id: id, name: name, email: email);
+  UserModel toModel() => UserModel(id: id, firstName: firstName, lastName: lastName, email: email);
 
   factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
 
