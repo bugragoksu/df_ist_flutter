@@ -9,15 +9,15 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:df_ist_flutter/src/core/di/locator.dart' as _i11;
-import 'package:df_ist_flutter/src/core/network/api_client.dart' as _i9;
+import 'package:df_ist_flutter/src/core/network/api_client.dart' as _i6;
 import 'package:df_ist_flutter/src/features/user/data/datasources/local/user_local_data_source.dart'
     as _i5;
 import 'package:df_ist_flutter/src/features/user/data/datasources/remote/user_remote_data_source.dart'
-    as _i8;
-import 'package:df_ist_flutter/src/features/user/data/repositories/user_repository_impl.dart'
     as _i7;
+import 'package:df_ist_flutter/src/features/user/data/repositories/user_repository_impl.dart'
+    as _i9;
 import 'package:df_ist_flutter/src/features/user/domain/repositories/user_repository.dart'
-    as _i6;
+    as _i8;
 import 'package:df_ist_flutter/src/features/user/domain/usecases/get_user_usecase.dart'
     as _i10;
 import 'package:dio/dio.dart' as _i3;
@@ -42,13 +42,15 @@ extension GetItInjectableX on _i1.GetIt {
         () => registerModule.sharedPreferences);
     gh.factoryAsync<_i5.UserLocalDataSource>(() async =>
         _i5.UserLocalDataSourceImpl(await getAsync<_i4.SharedPreferences>()));
-    gh.factoryAsync<_i6.UserRepository>(() async => _i7.UserRepositoryImpl(
-          remoteDataSource: gh<_i8.UserRemoteDataSource>(),
+    gh.factory<_i6.ApiClient>(() => _i6.ApiClient(dio: gh<_i3.Dio>()));
+    gh.factory<_i7.UserRemoteDataSource>(
+        () => _i7.UserRemoteDataSourceImpl(gh<_i6.ApiClient>()));
+    gh.factoryAsync<_i8.UserRepository>(() async => _i9.UserRepositoryImpl(
+          remoteDataSource: gh<_i7.UserRemoteDataSource>(),
           localDataSource: await getAsync<_i5.UserLocalDataSource>(),
         ));
-    gh.factory<_i9.ApiClient>(() => _i9.ApiClient(dio: gh<_i3.Dio>()));
     gh.factoryAsync<_i10.GetUserUsecase>(
-        () async => _i10.GetUserUsecase(await getAsync<_i6.UserRepository>()));
+        () async => _i10.GetUserUsecase(await getAsync<_i8.UserRepository>()));
     return this;
   }
 }

@@ -1,10 +1,12 @@
 import 'package:df_ist_flutter/src/core/network/api_client.dart';
 import 'package:df_ist_flutter/src/features/user/data/dto/user_dto.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class UserRemoteDataSource {
   Future<UserDto> getUser(int id);
 }
 
+@Injectable(as: UserRemoteDataSource)
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final ApiClient apiClient;
 
